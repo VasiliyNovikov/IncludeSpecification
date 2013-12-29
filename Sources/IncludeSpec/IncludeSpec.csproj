@@ -40,8 +40,14 @@
     <Compile Include="IncludeProperty.cs" />
     <Compile Include="IncludeSpecification.cs" />
     <Compile Include="IncludeSpecificationBuilder.cs" />
+    <Compile Include="IncludeSpecificationExecutor.cs" />
     <Compile Include="Integration\IIntegrationSource.cs" />
+    <Compile Include="Plan\SeparateLoadPlan.cs" />
+    <Compile Include="Plan\IncludePlan.cs" />
+    <Compile Include="Plan\KeyBasedLoadPlan.cs" />
+    <Compile Include="Plan\LoadPlan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\ExpressionBuilder.cs" />
     <Compile Include="Utils\NavigationMemberExtensions.cs" />
   </ItemGroup>
   <ItemGroup />

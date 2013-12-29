@@ -12,11 +12,13 @@ namespace IncludeSpec.Integration
   {
     IEnumerable<PropertyInfo> GetPrimaryKey(Type entityType);
     IEnumerable<PropertyInfo> GetNavigationKey(PropertyInfo navigationProperty);
-    IEnumerable<PropertyInfo> GetInverseNavigationKey(PropertyInfo navigationProperty);
+    IEnumerable<PropertyInfo> GetOtherNavigationKey(PropertyInfo navigationProperty);
 
-    List<T> ExecuteQuery<T>(IQueryable<T> query);
-    Task<List<T>> ExecuteQueryAsync<T>(IQueryable<T> query);
+    IQueryable Include(IQueryable query, string path);
 
+    IList ExecuteQuery(IQueryable query);
+    Task<IList> ExecuteQueryAsync(IQueryable query);
 
+    IQueryable<T> CreateQuery<T>() where T : class;
   }
 }

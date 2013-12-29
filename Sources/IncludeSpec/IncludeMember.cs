@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Linq.Expressions;
 using System.Reflection;
 
 namespace IncludeSpec
 {
   public abstract class IncludeMember
   {
-    protected IncludeMember(MemberInfo member, IncludeSpecification specification, bool loadSeparately, int? desiredBatchSize = null, Delegate includeCondition = null)
+    protected IncludeMember(MemberInfo member, IncludeSpecification specification, bool loadSeparately, int? desiredBatchSize = null)
     {
-      IncludeCondition = includeCondition;
       if (member == null)
       {
         throw new ArgumentNullException("member");
@@ -27,9 +25,5 @@ namespace IncludeSpec
     public bool LoadSeparately { get; private set; }
 
     public int? DesiredBatchSize { get; private set; }
-
-    public Delegate IncludeCondition { get; private set; }
-
-    public LambdaExpression MemberPredicate { get; protected set; }
   }
 }
