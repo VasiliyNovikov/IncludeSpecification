@@ -16,6 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{4E8976
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncludeSpec.NHibernate", "IncludeSpec.NHibernate\IncludeSpec.NHibernate.csproj", "{7BFEABDA-6360-4E59-8D7B-22AD793B5008}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{F640C51E-1D55-472F-A0BF-DDA89E060BDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncludeSpec.EntityFramework.Test", "Test\IncludeSpec.EntityFramework.Test\IncludeSpec.EntityFramework.Test.csproj", "{BD0A3FC2-8207-4532-A1A9-757569346528}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,8 +38,15 @@ Global
 		{7BFEABDA-6360-4E59-8D7B-22AD793B5008}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BFEABDA-6360-4E59-8D7B-22AD793B5008}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BFEABDA-6360-4E59-8D7B-22AD793B5008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD0A3FC2-8207-4532-A1A9-757569346528}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD0A3FC2-8207-4532-A1A9-757569346528}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD0A3FC2-8207-4532-A1A9-757569346528}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD0A3FC2-8207-4532-A1A9-757569346528}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BD0A3FC2-8207-4532-A1A9-757569346528} = {F640C51E-1D55-472F-A0BF-DDA89E060BDC}
 	EndGlobalSection
 EndGlobal
