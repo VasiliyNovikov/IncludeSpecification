@@ -40,7 +40,7 @@ namespace IncludeSpec
 
     public IncludeSpecificationBuilder<T> IncludeIf<TProperty>(Expression<Func<T, TProperty>> member, Func<T, bool> includeCondition, bool loadSeparately = false, IncludeSpecification<TProperty> propertySpecification = null, int? desiredBatchSize = null)
     {
-      _members.Add(new IncludeProperty(member.GetNavigationMember(), propertySpecification, loadSeparately, desiredBatchSize, includeCondition));
+      _members.Add(new IncludeProperty(member.GetNavigationMember(), propertySpecification, loadSeparately, desiredBatchSize));
       return this;
     }
 
@@ -98,7 +98,7 @@ namespace IncludeSpec
 
     public IncludeSpecificationBuilder<T> IncludeCollectionIf<TEntity>(Expression<Func<T, IEnumerable<TEntity>>> property, Func<T, bool> includeCondition, bool loadSeparately = false, IncludeSpecification<TEntity> itemSpecification = null, int? desiredBatchSize = null)
     {
-      _members.Add(new IncludeCollection(property.GetNavigationMember(), itemSpecification, loadSeparately, desiredBatchSize, includeCondition));
+      _members.Add(new IncludeCollection(property.GetNavigationMember(), itemSpecification, loadSeparately, desiredBatchSize));
       return this;
     }
 
@@ -133,25 +133,6 @@ namespace IncludeSpec
     public static implicit operator IncludeSpecification(IncludeSpecificationBuilder<T> builder)
     {
       return (IncludeSpecification<T>)builder;
-    }
-
-    /// <summary>
-    /// Does property.Where(predicate).  This is always loaded separately
-    /// </summary>
-    public IncludeSpecificationBuilder<T> IncludeCollectionWithPredicate<TEntity>(Expression<Func<T, IEnumerable<TEntity>>> property,
-      Expression<Func<TEntity, bool>> predicate, Action<IncludeSpecificationBuilder<TEntity>> itemBuildCallback = null, int? desiredBatchSize = null)
-    {
-      IncludeSpecification<TEntity> itemSpecification = null;
-      if (itemBuildCallback != null)
-      {
-        var itemBuilder = new IncludeSpecificationBuilder<TEntity>();
-        itemBuildCallback(itemBuilder);
-        itemSpecification = itemBuilder;
-      }
-
-      const bool loadSeparately = true;
-      _members.Add(new IncludeCollection(property.GetNavigationMember(), predicate, itemSpecification, loadSeparately, desiredBatchSize));
-      return this;
     }
   }
 }

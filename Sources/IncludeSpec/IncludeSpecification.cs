@@ -31,21 +31,6 @@ namespace IncludeSpec
 
     #region Combine
 
-    private static Delegate CombineConditions(Delegate c1, Delegate c2)
-    {
-      if (c1 == null || c2 == null)
-      {
-        return null;
-      }
-
-      var objectType = c1.Method.GetParameters()[0].ParameterType;
-      var param = Expression.Parameter(objectType);
-      return Expression.Lambda(Expression.OrElse(Expression.Invoke(Expression.Constant(c1), param),
-                                                 Expression.Invoke(Expression.Constant(c2), param)),
-                               param)
-                       .Compile();
-    }
-
     private static IncludeMember Combine(IncludeMember m1, IncludeMember m2)
     {
       var combinedSpec = Combine(m1.Specification, m2.Specification);
@@ -53,10 +38,9 @@ namespace IncludeSpec
       var desiredBatchSize = m1.DesiredBatchSize == null || m2.DesiredBatchSize == null
                                ? (m1.DesiredBatchSize ?? m2.DesiredBatchSize)
                                : Math.Min(m1.DesiredBatchSize.Value, m2.DesiredBatchSize.Value);
-      var includeCondition = CombineConditions(m1.IncludeCondition, m2.IncludeCondition);
       return m1 is IncludeProperty
-               ? (IncludeMember)new IncludeProperty(m1.Member, combinedSpec, loadSeparately, desiredBatchSize, includeCondition)
-               : new IncludeCollection(m1.Member, combinedSpec, loadSeparately, desiredBatchSize, includeCondition);
+               ? (IncludeMember)new IncludeProperty(m1.Member, combinedSpec, loadSeparately, desiredBatchSize)
+               : new IncludeCollection(m1.Member, combinedSpec, loadSeparately, desiredBatchSize);
     }
 
     public static IncludeSpecification Combine(IncludeSpecification spec1, IncludeSpecification spec2)
