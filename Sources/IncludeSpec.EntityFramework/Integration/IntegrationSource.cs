@@ -11,7 +11,7 @@ using IncludeSpec.Integration;
 
 namespace IncludeSpec.EntityFramework.Integration
 {
-  class IntegrationSource : IIntegrationSource
+  public class IntegrationSource : IIntegrationSource
   {
     private readonly DbContext _context;
     private readonly MetadataWorkspace _metadata;
@@ -22,15 +22,28 @@ namespace IncludeSpec.EntityFramework.Integration
       _metadata = (_context as IObjectContextAdapter).ObjectContext.MetadataWorkspace;
     }
 
+    private EntityType GetEdmType(Type entityType)
+    {
+      var edmClrType = (EntityType)_metadata.GetType(entityType.Name, entityType.Namespace, DataSpace.OSpace);
+      return (EntityType)_metadata.GetEdmSpaceType(edmClrType);
+    }
+
     public IEnumerable<PropertyInfo> GetPrimaryKey(Type entityType)
     {
-      var edmType = _metadata.GetItems<EntityType>(DataSpace.OSpace).Single(t => t.FullName == entityType.FullName);
+      var edmType = GetEdmType(entityType);
       return edmType.KeyProperties.Select(p => entityType.GetProperty(p.Name));
     }
 
     public IEnumerable<PropertyInfo> GetNavigationKey(PropertyInfo navigationProperty)
     {
-      throw new NotImplementedException();
+      var entityType = navigationProperty.ReflectedType;
+      var edmType = GetEdmType(entityType);
+      var edmProp = edmType.NavigationProperties.Single(p => p.Name == navigationProperty.Name);
+      var constraint = ((AssociationType)edmProp.RelationshipType).Constraint;
+      var navigationProps = constraint.FromRole == edmProp.FromEndMember
+        ? constraint.FromProperties
+        : constraint.ToProperties;
+      return navigationProps.Select(p => entityType.GetProperty(p.Name));
     }
 
     public IEnumerable<PropertyInfo> GetOtherNavigationKey(PropertyInfo navigationProperty)

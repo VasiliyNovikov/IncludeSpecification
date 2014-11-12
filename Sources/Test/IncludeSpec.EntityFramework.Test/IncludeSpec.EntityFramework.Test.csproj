@@ -47,6 +47,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -90,6 +91,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TestDbEntities.cs" />
     <Compile Include="User.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -130,9 +132,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\IncludeSpec.EntityFramework\IncludeSpec.EntityFramework.csproj">
+      <Project>{0DC8DF05-51EF-408F-8FC7-27461A9B401A}</Project>
+      <Name>IncludeSpec.EntityFramework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\IncludeSpec.Test.Utility\IncludeSpec.Test.Utility.csproj">
       <Project>{11EEBDFA-C5CA-4AFE-98AB-890DF42DE45B}</Project>
       <Name>IncludeSpec.Test.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IncludeSpec\IncludeSpec.csproj">
+      <Project>{157CD90F-814B-42F1-B224-DD65BDA24F8B}</Project>
+      <Name>IncludeSpec</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
