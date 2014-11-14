@@ -36,19 +36,37 @@ namespace IncludeSpec.EntityFramework.Integration
 
     public IEnumerable<PropertyInfo> GetNavigationKey(PropertyInfo navigationProperty)
     {
+      return GetNavigationKey(navigationProperty, false);
+    }
+
+    private IEnumerable<PropertyInfo> GetNavigationKey(PropertyInfo navigationProperty, bool other)
+    {
       var entityType = navigationProperty.ReflectedType;
       var edmType = GetEdmType(entityType);
       var edmProp = edmType.NavigationProperties.Single(p => p.Name == navigationProperty.Name);
-      var constraint = ((AssociationType)edmProp.RelationshipType).Constraint;
-      var navigationProps = constraint.FromRole == edmProp.FromEndMember
+      var constraint = ((AssociationType) edmProp.RelationshipType).Constraint;
+      var isFromRole = constraint.FromRole == edmProp.FromEndMember;
+      var navigationProps = (isFromRole && !other || !isFromRole && other)
         ? constraint.FromProperties
         : constraint.ToProperties;
-      return navigationProps.Select(p => entityType.GetProperty(p.Name));
+      Type targetEntityType;
+      if (other)
+      {
+        var propertyType = navigationProperty.PropertyType;
+        targetEntityType = propertyType.IsGenericType && propertyType.GetGenericTypeDefinition().GetInterfaces().Any(t => typeof(IEnumerable<>).Equals(t))
+          ? propertyType.GetGenericArguments()[0]
+          : propertyType;
+      }
+      else
+      {
+        targetEntityType = entityType;
+      }
+      return navigationProps.Select(p => targetEntityType.GetProperty(p.Name));
     }
 
     public IEnumerable<PropertyInfo> GetOtherNavigationKey(PropertyInfo navigationProperty)
     {
-      throw new NotImplementedException();
+      return GetNavigationKey(navigationProperty, true);
     }
 
     public IQueryable Include(IQueryable query, string path)

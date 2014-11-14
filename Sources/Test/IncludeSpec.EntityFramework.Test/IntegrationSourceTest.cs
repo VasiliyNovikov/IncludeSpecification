@@ -72,6 +72,17 @@ namespace IncludeSpec.EntityFramework.Test
     }
 
     [TestMethod]
+    public void IntegrationSource_GetOhterNavigationKey_For_Single_Reference_Test()
+    {
+      var parentGroupProperty = typeof(Group).GetProperty("ParentGroup");
+      var navigationKey = _integrationSource.GetOtherNavigationKey(parentGroupProperty).ToList();
+      Assert.AreEqual(1, navigationKey.Count);
+      Assert.AreEqual("Id", navigationKey[0].Name);
+      Assert.AreEqual(typeof(Guid), navigationKey[0].PropertyType);
+      Assert.AreEqual(typeof(Group), navigationKey[0].ReflectedType);
+    }
+
+    [TestMethod]
     public void IntegrationSource_GetNavigationKey_For_Collection_Test()
     {
       var childGroupsProperty = typeof(Group).GetProperty("ChildGroups");
@@ -79,6 +90,17 @@ namespace IncludeSpec.EntityFramework.Test
       Assert.AreEqual(1, navigationKey.Count);
       Assert.AreEqual("Id", navigationKey[0].Name);
       Assert.AreEqual(typeof(Guid), navigationKey[0].PropertyType);
+      Assert.AreEqual(typeof(Group), navigationKey[0].ReflectedType);
+    }
+
+    [TestMethod]
+    public void IntegrationSource_GetOtherNavigationKey_For_Collection_Test()
+    {
+      var childGroupsProperty = typeof(Group).GetProperty("ChildGroups");
+      var navigationKey = _integrationSource.GetOtherNavigationKey(childGroupsProperty).ToList();
+      Assert.AreEqual(1, navigationKey.Count);
+      Assert.AreEqual("ParentGroupId", navigationKey[0].Name);
+      Assert.AreEqual(typeof(Guid?), navigationKey[0].PropertyType);
       Assert.AreEqual(typeof(Group), navigationKey[0].ReflectedType);
     }
   }
