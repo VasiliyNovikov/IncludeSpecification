@@ -53,7 +53,7 @@ namespace IncludeSpec.EntityFramework.Integration
       if (other)
       {
         var propertyType = navigationProperty.PropertyType;
-        targetEntityType = propertyType.IsGenericType && propertyType.GetGenericTypeDefinition().GetInterfaces().Any(t => typeof(IEnumerable<>).Equals(t))
+        targetEntityType = propertyType.IsGenericType && propertyType.GetGenericArguments().Length == 1 && typeof(IEnumerable<object>).IsAssignableFrom(propertyType.GetGenericTypeDefinition().MakeGenericType(typeof(object)))
           ? propertyType.GetGenericArguments()[0]
           : propertyType;
       }
