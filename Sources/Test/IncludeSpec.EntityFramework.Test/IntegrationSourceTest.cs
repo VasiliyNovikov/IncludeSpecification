@@ -72,7 +72,7 @@ namespace IncludeSpec.EntityFramework.Test
     }
 
     [TestMethod]
-    public void IntegrationSource_GetOhterNavigationKey_For_Single_Reference_Test()
+    public void IntegrationSource_GetOtherNavigationKey_For_Single_Reference_Test()
     {
       var parentGroupProperty = typeof(Group).GetProperty("ParentGroup");
       var navigationKey = _integrationSource.GetOtherNavigationKey(parentGroupProperty).ToList();
