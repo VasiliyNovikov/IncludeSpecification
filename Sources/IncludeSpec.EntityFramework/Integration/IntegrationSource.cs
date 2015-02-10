@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
@@ -69,17 +68,17 @@ namespace IncludeSpec.EntityFramework.Integration
       return GetNavigationKey(navigationProperty, true);
     }
 
-    public IQueryable Include(IQueryable query, string path)
+    public IQueryable<T> Include<T>(IQueryable<T> query, string path)
     {
       return query.Include(path);
     }
 
-    public IList ExecuteQuery(IQueryable query)
+    public IList<T> ExecuteQuery<T>(IQueryable<T> query)
     {
-      return query.OfType<object>().ToList();
+      return query.ToList();
     }
 
-    public async Task<IList> ExecuteQueryAsync(IQueryable query)
+    public async Task<IList<T>> ExecuteQueryAsync<T>(IQueryable<T> query)
     {
       return await query.ToListAsync();
     }

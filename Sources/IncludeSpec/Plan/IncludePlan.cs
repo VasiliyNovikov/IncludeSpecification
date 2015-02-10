@@ -33,7 +33,7 @@ namespace IncludeSpec.Plan
       get { return !HasPaths && !HasSeparates; }
     }
 
-    public IQueryable AddIncludes(IIntegrationSource source, IQueryable query)
+    public IQueryable<T> AddIncludes<T>(IIntegrationSource source, IQueryable<T> query)
     {
       foreach (var path in Paths)
       {
