@@ -15,6 +15,7 @@ namespace IncludeSpec.EntityFramework.Test
     public TestDbEntities(string connectionString)
       : base(BuildConnectionString(connectionString))
     {
+      Configuration.LazyLoadingEnabled = false;
     }
   }
 }

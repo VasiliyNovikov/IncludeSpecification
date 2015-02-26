@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
 using IncludeSpec.EntityFramework.Integration;
 using IncludeSpec.Test.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,21 +25,6 @@ namespace IncludeSpec.EntityFramework.Test
     public void TestCleanup()
     {
       TestDatabase.Delete(_database).Wait();
-    }
-
-    [TestMethod]
-    public async Task CreateDeleteDatabaseTest()
-    {
-      using (var connection = new SqlConnection(_database.ConnectionString))
-      {
-        await connection.OpenAsync();
-        using (var command = new SqlCommand("select GETUTCDATE()", connection))
-        {
-          var dateTime = (DateTime)await command.ExecuteScalarAsync();
-          var diff = Math.Abs((dateTime - DateTime.UtcNow).TotalMilliseconds);
-          Assert.IsTrue(diff < 500);
-        }
-      }
     }
 
     [TestMethod]

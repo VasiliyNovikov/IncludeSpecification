@@ -9,12 +9,14 @@ namespace IncludeSpec
 {
   public static class IncludeSpecificationExecutor
   {
-    public static IEnumerable<T> Execute<T>(IIntegrationSource source, IQueryable<T> query, IncludeSpecification<T> includeSpec)
+    public static IList<T> Execute<T>(IIntegrationSource source, IQueryable<T> query, IncludeSpecification<T> includeSpec)
     {
-      return Execute(source, query, IncludePlan.BuildPlan(source, includeSpec));
+      return includeSpec == null
+        ? source.ExecuteQuery(query)
+        : Execute(source, query, IncludePlan.BuildPlan(source, includeSpec));
     }
 
-    private static IEnumerable<T> Execute<T>(IIntegrationSource source, IQueryable<T> query, IncludePlan plan)
+    private static IList<T> Execute<T>(IIntegrationSource source, IQueryable<T> query, IncludePlan plan)
     {
       var includedQuery = plan.AddIncludes(source, query);
       var entities = source.ExecuteQuery(includedQuery);
@@ -45,12 +47,14 @@ namespace IncludeSpec
 
     private static readonly MethodInfo ExecuteMethodDefinition = typeof(IncludeSpecificationExecutor).GetMethod("ExecuteHelper", BindingFlags.Static | BindingFlags.NonPublic);
 
-    public static Task<IEnumerable<T>> ExecuteAsync<T>(IIntegrationSource source, IQueryable<T> query, IncludeSpecification<T> includeSpec, bool tryExecuteConcurrently = false)
+    public static async Task<IList<T>> ExecuteAsync<T>(IIntegrationSource source, IQueryable<T> query, IncludeSpecification<T> includeSpec, bool tryExecuteConcurrently = false)
     {
-      return ExecuteAsync(source, query, IncludePlan.BuildPlan(source, includeSpec), tryExecuteConcurrently);
+      return includeSpec == null
+        ? await source.ExecuteQueryAsync(query)
+        : await ExecuteAsync(source, query, IncludePlan.BuildPlan(source, includeSpec), tryExecuteConcurrently);
     }
 
-    private static async Task<IEnumerable<T>> ExecuteAsync<T>(IIntegrationSource source, IQueryable<T> query, IncludePlan plan, bool tryExecuteConcurrently)
+    private static async Task<IList<T>> ExecuteAsync<T>(IIntegrationSource source, IQueryable<T> query, IncludePlan plan, bool tryExecuteConcurrently)
     {
       var includedQuery = plan.AddIncludes(source, query);
       var entities = await source.ExecuteQueryAsync(includedQuery);

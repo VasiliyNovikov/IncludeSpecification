@@ -68,6 +68,7 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="IntegrationSourceTest.cs" />
+    <Compile Include="IntegrationTest.cs" />
     <Compile Include="Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -89,6 +90,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TestDatabaseTest.cs" />
     <Compile Include="TestDbEntities.cs" />
     <Compile Include="User.cs">
       <DependentUpon>Model.tt</DependentUpon>
