@@ -5,7 +5,9 @@ namespace IncludeSpec
 {
   public abstract class IncludeMember
   {
-    protected IncludeMember(MemberInfo member, IncludeSpecification specification, bool loadSeparately, int? desiredBatchSize = null)
+    private readonly Lazy<IncludeSpecification> _specification;
+
+    protected IncludeMember(MemberInfo member, Lazy<IncludeSpecification> specification, bool loadSeparately, int? desiredBatchSize)
     {
       if (member == null)
       {
@@ -13,14 +15,23 @@ namespace IncludeSpec
       }
 
       Member = member;
-      Specification = specification;
+      _specification = specification;
       LoadSeparately = loadSeparately;
       DesiredBatchSize = desiredBatchSize;
     }
 
+    protected IncludeMember(MemberInfo member, IncludeSpecification specification, bool loadSeparately, int? desiredBatchSize)
+      : this(member, new Lazy<IncludeSpecification>(() => specification), loadSeparately, desiredBatchSize)
+    {
+      
+    }
+
     public MemberInfo Member { get; private set; }
 
-    public IncludeSpecification Specification { get; private set; }
+    public IncludeSpecification Specification
+    {
+      get { return _specification.Value; }
+    }
 
     public bool LoadSeparately { get; private set; }
 

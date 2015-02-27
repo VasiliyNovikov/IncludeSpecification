@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using IncludeSpec.EntityFramework.Integration;
@@ -8,11 +9,25 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace IncludeSpec.EntityFramework.Test
 {
   [TestClass]
-  public class IntegrationTest
+  public class EntityFrameworkIntegrationTest
   {
     private TestDatabase _database;
     private TestDbEntities _context;
     private IntegrationSource _integrationSource;
+
+    #region Test Includes
+
+    private static readonly IncludeSpecification<Group> TestIncludes = IncludeSpecification
+      .For<Group>()
+      .Include(g => g.ParentGroup)
+      .IncludeCollection(g => g.ChildGroups);
+
+    private static readonly IncludeSpecification<Group> TestIncludesLoadedSeparately = IncludeSpecification
+      .For<Group>()
+      .Include(g => g.ParentGroup, true)
+      .IncludeCollection(g => g.ChildGroups, true);
+
+    #endregion
 
     [TestInitialize]
     public void TestInitialize()
@@ -114,12 +129,7 @@ namespace IncludeSpec.EntityFramework.Test
     {
       var context = await InitializeDbEntities();
       var query = context.Groups.Where(g => g.Name == "Group 1.2");
-      var includes = IncludeSpecification
-        .For<Group>()
-        .Include(g => g.ParentGroup)
-        .IncludeCollection(g => g.ChildGroups);
-
-      var groups = await context.QueryAsync(query, includes);
+      var groups = await context.QueryAsync(query, TestIncludes);
       Assert.AreEqual(1, groups.Count);
       foreach (var group in groups)
       {
@@ -133,12 +143,35 @@ namespace IncludeSpec.EntityFramework.Test
     {
       var context = await InitializeDbEntities();
       var query = context.Groups.Where(g => g.Name == "Group 1.2");
-      var includes = IncludeSpecification
-        .For<Group>()
-        .Include(g => g.ParentGroup, true)
-        .IncludeCollection(g => g.ChildGroups, true);
+      var groups = await context.QueryAsync(query, TestIncludesLoadedSeparately);
+      Assert.AreEqual(1, groups.Count);
+      foreach (var group in groups)
+      {
+        Assert.IsNotNull(group.ParentGroup);
+        Assert.AreEqual(2, group.ChildGroups.Count);
+      }
+    }
 
-      var groups = await context.QueryAsync(query, includes);
+    [TestMethod]
+    public async Task IncludeSpec_Integration_EntityFramework_Query_With_NoTracking_And_Includes_Test()
+    {
+      var context = await InitializeDbEntities();
+      var query = context.Groups.Where(g => g.Name == "Group 1.2").AsNoTracking();
+      var groups = await context.QueryAsync(query, TestIncludes);
+      Assert.AreEqual(1, groups.Count);
+      foreach (var group in groups)
+      {
+        Assert.IsNotNull(group.ParentGroup);
+        Assert.AreEqual(2, group.ChildGroups.Count);
+      }
+    }
+
+    [TestMethod]
+    public async Task IncludeSpec_Integration_EntityFramework_Query_With_NoTracking_And_Includes_Loaded_Separately_Test()
+    {
+      var context = await InitializeDbEntities();
+      var query = context.Groups.Where(g => g.Name == "Group 1.2").AsNoTracking();
+      var groups = await context.QueryAsync(query, TestIncludesLoadedSeparately);
       Assert.AreEqual(1, groups.Count);
       foreach (var group in groups)
       {

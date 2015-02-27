@@ -68,7 +68,7 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="IntegrationSourceTest.cs" />
-    <Compile Include="IntegrationTest.cs" />
+    <Compile Include="EntityFrameworkIntegrationTest.cs" />
     <Compile Include="Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

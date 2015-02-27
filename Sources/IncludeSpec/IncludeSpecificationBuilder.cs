@@ -38,35 +38,6 @@ namespace IncludeSpec
       return Include(property, false, propertySpecification, desiredBatchSize);
     }
 
-    public IncludeSpecificationBuilder<T> IncludeIf<TProperty>(Expression<Func<T, TProperty>> member, Func<T, bool> includeCondition, bool loadSeparately = false, IncludeSpecification<TProperty> propertySpecification = null, int? desiredBatchSize = null)
-    {
-      _members.Add(new IncludeProperty(member.GetNavigationMember(), propertySpecification, loadSeparately, desiredBatchSize));
-      return this;
-    }
-
-    public IncludeSpecificationBuilder<T> IncludeIf<TProperty>(Expression<Func<T, TProperty>> property, Func<T, bool> includeCondition, bool loadSeparately, Action<IncludeSpecificationBuilder<TProperty>> propertyBuildCallback, int? desiredBatchSize = null)
-    {
-      IncludeSpecification<TProperty> propertySpecification = null;
-      if (propertyBuildCallback != null)
-      {
-        var propertyBuilder = new IncludeSpecificationBuilder<TProperty>();
-        propertyBuildCallback(propertyBuilder);
-        propertySpecification = propertyBuilder;
-      }
-
-      return IncludeIf(property, includeCondition, loadSeparately, propertySpecification, desiredBatchSize);
-    }
-
-    public IncludeSpecificationBuilder<T> IncludeIf<TProperty>(Expression<Func<T, TProperty>> member, Func<T, bool> includeCondition, Action<IncludeSpecificationBuilder<TProperty>> propertyBuildCallback, int? desiredBatchSize = null)
-    {
-      return IncludeIf(member, includeCondition, false, propertyBuildCallback, desiredBatchSize);
-    }
-
-    public IncludeSpecificationBuilder<T> IncludeIf<TProperty>(Expression<Func<T, TProperty>> property, Func<T, bool> includeCondition, IncludeSpecification<TProperty> propertySpecification, int? desiredBatchSize = null)
-    {
-      return IncludeIf(property, includeCondition, false, propertySpecification, desiredBatchSize);
-    }
-
     public IncludeSpecificationBuilder<T> IncludeCollection<TEntity>(Expression<Func<T, IEnumerable<TEntity>>> property, bool loadSeparately, Action<IncludeSpecificationBuilder<TEntity>> itemBuildCallback, int? desiredBatchSize = null)
     {
       IncludeSpecification<TEntity> itemSpecification = null;
