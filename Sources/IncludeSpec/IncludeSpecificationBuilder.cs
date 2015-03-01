@@ -33,7 +33,18 @@ namespace IncludeSpec
       return this;
     }
 
+    public IncludeSpecificationBuilder<T> Include<TProperty>(Expression<Func<T, TProperty>> member, bool loadSeparately, Lazy<IncludeSpecification<TProperty>> propertySpecification, int? desiredBatchSize = null)
+    {
+      _members.Add(new IncludeProperty(member.GetNavigationMember(), new Lazy<IncludeSpecification>(() => propertySpecification.Value), loadSeparately, desiredBatchSize));
+      return this;
+    }
+
     public IncludeSpecificationBuilder<T> Include<TProperty>(Expression<Func<T, TProperty>> property, IncludeSpecification<TProperty> propertySpecification, int? desiredBatchSize = null)
+    {
+      return Include(property, false, propertySpecification, desiredBatchSize);
+    }
+
+    public IncludeSpecificationBuilder<T> Include<TProperty>(Expression<Func<T, TProperty>> property, Lazy<IncludeSpecification<TProperty>> propertySpecification, int? desiredBatchSize = null)
     {
       return Include(property, false, propertySpecification, desiredBatchSize);
     }
